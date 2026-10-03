@@ -36,7 +36,7 @@
 
 - (void)setupUI {
     CGFloat viewW = self.view.bounds.size.width;
-    CGFloat viewH = self.view.bounds.size.height;
+    // CGFloat viewH = self.view.bounds.size.height;
     CGFloat safeTop = 55.0;
 
     // 1. Tiêu đề Cá Nhân Hóa
