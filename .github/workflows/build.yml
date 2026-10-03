@@ -1,0 +1,60 @@
+name: Build Caro Game (DEB & IPA)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Application (arm64e)
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Theos (RootHide)
+        uses: waruhachi/theos-action@v2.4.10
+        with:
+          theos-src: 'roothide/theos'
+          theos-branch: 'master'
+          sdks-src: 'theos/sdks'
+          sdks-branch: 'master'
+
+      - name: Build RootHide Application
+        run: |
+          make clean package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=roothide
+          mkdir -p output
+          cp packages/*.deb output/Caro_roothide.deb
+          
+          # Đóng gói file .IPA cho TrollStore
+          mkdir -p Payload
+          if [ -d ".theos/_/Applications/Caro.app" ]; then
+            cp -r .theos/_/Applications/Caro.app Payload/
+          elif [ -d "_/Applications/Caro.app" ]; then
+            cp -r _/Applications/Caro.app Payload/
+          fi
+          zip -r output/Caro_NguyenTrongHieu.ipa Payload
+
+      - name: List Output Files
+        run: |
+          ls -la output/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/master')
+        with:
+          tag_name: v1.0.0
+          name: Cờ Caro v1.0.0 (Nguyễn Trọng Hiếu - iPhone 13 Pro Max)
+          body: |
+            ### 🏆 Cờ Caro Offline - Phiên Bản Cá Nhân Hóa Dành Cho Chủ Xưởng
+            - **Dòng máy:** iPhone 13 Pro Max (iOS 16.1.1 RootHide & TrollStore).
+            - **Tính năng:** Bàn cờ 15x15, Đấu với Máy (AI thông minh) & Chế độ 2 người, Haptic Feedback rung phản hồi.
+            - **Định dạng:** 
+              * `Caro_roothide.deb` (Cài qua Sileo / Zebra)
+              * `Caro_NguyenTrongHieu.ipa` (Cài qua TrollStore)
+          files: output/*
+

@@ -1,0 +1,8 @@
+Package: com.tronghieu.carogame
+Name: Cờ Caro (Nguyễn Trọng Hiếu)
+Version: 1.0.0
+Architecture: iphoneos-arm64e
+Description: Game Co Caro Gomoku ca nhan hoa danh cho Chu Xuong
+Maintainer: Nguyen Trong Hieu
+Author: Nguyen Trong Hieu
+Section: Games
