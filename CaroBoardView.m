@@ -57,14 +57,15 @@
     CGContextSetStrokeColorWithColor(ctx, [UIColor colorWithRed:0.45 green:0.32 blue:0.20 alpha:0.8].CGColor);
     CGContextSetLineWidth(ctx, 1.2);
 
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        CGFloat x = cellSize * 0.5 + i * cellSize;
-        CGContextMoveToPoint(ctx, x, cellSize * 0.5);
-        CGContextAddLineToPoint(ctx, x, h - cellSize * 0.5);
+    // Kẻ lưới ô vuông chuẩn caro học sinh (Đường viền ô, quân cờ nằm trọn trong ô)
+    for (int i = 0; i <= BOARD_SIZE; i++) {
+        CGFloat x = i * cellSize;
+        CGContextMoveToPoint(ctx, x, 0);
+        CGContextAddLineToPoint(ctx, x, h);
 
-        CGFloat y = cellSize * 0.5 + i * cellSize;
-        CGContextMoveToPoint(ctx, cellSize * 0.5, y);
-        CGContextAddLineToPoint(ctx, w - cellSize * 0.5, y);
+        CGFloat y = i * cellSize;
+        CGContextMoveToPoint(ctx, 0, y);
+        CGContextAddLineToPoint(ctx, w, y);
     }
     CGContextStrokePath(ctx);
 
